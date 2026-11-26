@@ -635,7 +635,8 @@ impl VectorcraftApp {
         let window_title = chrome::window_title(self);
         let shown = AppShell::new(WindowKey::main())
             .title_bar_if(true, chrome::app_bar)
-            .options_bar(self.ui.control_bar, |ui, _cx, app: &mut VectorcraftApp| {
+            // The Control bar sets tool options: hidden with the tools while no document is open.
+            .options_bar(self.ui.control_bar && self.session.active().is_some(), |ui, _cx, app: &mut VectorcraftApp| {
                 chrome::control_bar(app, ui);
             })
             .options_place(Bind::bound(&mut control_bar_place))

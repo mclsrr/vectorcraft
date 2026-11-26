@@ -68,6 +68,9 @@ pub(crate) struct Runtime {
     specs: Tracked<Specs>,
     /// The tool rails of the layout, which Shift+Tab keeps shown, kept up to date by [`refresh_specs`].
     rails: Tracked<BTreeSet<PanelKey>>,
+    /// The panels that still show while no document is open (Help's Discover): the Home screen
+    /// hides the tools and the other panels, which have nothing to act on.
+    home_panels: Tracked<BTreeSet<PanelKey>>,
     /// What each tool rail of the layout reads across passes, by its panel.
     pub(crate) rail_models: HashMap<String, crate::toolbar::RailModel>,
     /// A panel just floated out of a tool rail, whose window takes over the held press on the next
@@ -1324,9 +1327,18 @@ pub(crate) fn show(app: &mut VectorcraftApp, ui: &mut egui::Ui, keeps_tools: boo
     // The specs and rails leave the app for the pass, which lends the app to the panel bodies.
     let specs = std::mem::take(&mut app.dock_rt.specs);
     let rails = std::mem::take(&mut app.dock_rt.rails);
+    // With no document open (the Home screen), the tools and the panels have nothing to act on:
+    // they stay hidden until a file is opened or created. Help's Discover still shows when asked for.
+    let no_document = app.session.active().is_none();
+    if no_document && app.dock_rt.home_panels.is_empty() {
+        app.dock_rt.home_panels.edit(|kept| *kept = BTreeSet::from([PanelKey::of(crate::panels::discover::ID)]));
+    }
+    let home_panels = std::mem::take(&mut app.dock_rt.home_panels);
     // The rails are what Shift+Tab keeps; while the panels show, the area hides none.
     let hide = if presenting {
         HidePanels::All
+    } else if no_document {
+        HidePanels::Except(&home_panels)
     } else if keeps_tools {
         HidePanels::Except(&rails)
     } else {
@@ -1357,6 +1369,7 @@ pub(crate) fn show(app: &mut VectorcraftApp, ui: &mut egui::Ui, keeps_tools: boo
     };
     app.dock_rt.specs = specs;
     app.dock_rt.rails = rails;
+    app.dock_rt.home_panels = home_panels;
     // A workspace a command switched to or changed in this pass (`Workspace::replace`) stays; the
     // pass's edits were to the one it replaced.
     if app.ui.dock_workspace.revision() == revision {

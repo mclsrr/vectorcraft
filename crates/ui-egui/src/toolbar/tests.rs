@@ -383,7 +383,8 @@ fn row_sizes(rects: &[egui::Rect]) -> Vec<usize> {
 /// its buttons out in the columns chosen, Advanced too.
 #[test]
 fn the_columns_command_toggles_or_sets_the_toolbar_columns() {
-    let mut app = VectorcraftApp::new(Session::new(), Default::default());
+    // The tools show only while a document is open (the Home screen hides them).
+    let mut app = app_with(800, 600);
     let ctx = reader();
     // 700 pt: too short for the single column, which scrolls instead of turning into two.
     let laid_out = |app: &mut VectorcraftApp, t0: f64| {
