@@ -1,3 +1,5 @@
+Windows artwork is supplied by Design System in Iconos-Design-System.zip. The stable ICO and the 512 px hicolor PNG are master files. The document pair comes from documentos/ai. Regenerating smaller hicolor PNGs with packaging/icons.sh requires ImageMagick 7.
+
 # VectorCraft app icon
 
 **Creature:** a regal engraved dragon, VectorCraft's mascot.

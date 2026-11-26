@@ -49,9 +49,11 @@ fn main() -> Result<(), String> {
     }
     println!("cargo:rerun-if-changed=../../assets/app-icon/vectorcraft.ico");
     println!("cargo:rerun-if-changed=../../assets/app-icon/vectorcraft-nightly.ico");
+    println!("cargo:rerun-if-changed=../../assets/app-icon/vectorcraft-document.ico");
     println!("cargo:rerun-if-env-changed=VECTORCRAFT_REQUIRE_WINRES");
     let mut res = winresource::WindowsResource::new();
     res.set_icon(build_channel::windows_icon_path(nightly))
+        .set_icon_with_id("../../assets/app-icon/vectorcraft-document.ico", "2")
         .set("ProductName", if nightly { "VectorCraft Nightly" } else { "VectorCraft" })
         .set("FileDescription", if nightly { "VectorCraft Nightly vector illustration editor" } else { "VectorCraft vector illustration editor" })
         .set("CompanyName", "Learning Machines LLC")

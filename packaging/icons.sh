@@ -28,20 +28,14 @@ render "$SVG" 1024 "$DIR/vectorcraft-1024.png"
 render "$MAC" 512 "$DIR/vectorcraft-macos-512.png"
 
 # Linux hicolor theme (the 256 one is also the runtime icon on Windows and Linux).
-for s in 16 24 32 48 64 128 256 512; do
+for s in 16 24 32 48 64 128 256; do
   mkdir -p "$DIR/hicolor/${s}x${s}/apps"
-  render "$SVG" "$s" "$DIR/hicolor/${s}x${s}/apps/$ID.png"
+  magick "$DIR/hicolor/512x512/apps/ai.storyteller.vectorcraft.png" -resize "${s}x${s}" "$DIR/hicolor/${s}x${s}/apps/$ID.png"
 done
 mkdir -p "$DIR/hicolor/scalable/apps"
 cp "$DIR/vectorcraft-small.svg" "$DIR/hicolor/scalable/apps/$ID.svg"
 
-# Windows .ico.
-ICO_PNGS=()
-for s in 16 20 24 32 40 48 64 128 256; do
-  render "$SVG" "$s" "$TMP/ico-$s.png"
-  ICO_PNGS+=("$TMP/ico-$s.png")
-done
-(cd "$ROOT" && cargo run -q -p xtask -- ico "$DIR/vectorcraft.ico" "${ICO_PNGS[@]}")
+# Windows uses the supplied multiresolution ICO files in assets/app-icon directly.
 
 # macOS .icns.
 if command -v iconutil >/dev/null; then
