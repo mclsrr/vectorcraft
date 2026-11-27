@@ -8528,7 +8528,7 @@ dependencies = [
  "vectorcraft-doc",
  "vectorcraft-geom 0.24.2",
  "wasmi",
- "wasmparser 0.228.0",
+ "wasmparser 0.263.0",
  "wat",
  "web-time",
 ]
