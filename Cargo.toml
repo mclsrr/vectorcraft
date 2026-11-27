@@ -101,7 +101,7 @@ socket2 = "0.6"
 wasmi = { version = "2.0.0", default-features = false, features = ["std", "validate", "stable", "portable-dispatch"] }
 # The plug-in host's check of the WebAssembly features a module uses (Apache-2.0 WITH
 # LLVM-exception). It is the version wasmi 2.0.0 uses.
-wasmparser = { version = "0.228.0", default-features = false, features = ["std", "validate", "features"] }
+wasmparser = { version = "0.263.0", default-features = false, features = ["std", "validate", "features"] }
 # Tests: WebAssembly text -> binary for the plug-in fixtures (Apache-2.0 WITH LLVM-exception).
 wat = "1.228"
 
